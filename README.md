@@ -151,6 +151,7 @@ Aşağıdaki linkten nasıl yüklenebileceğine ulaşabilirsiniz.
 https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html
 
 Yükleme ve login işlemlerini yaptıktan sonra powershell üzerinden cluster oluşturma adımına geçerlim.
+
 eksctl create cluster --name <my-cluster> --version <1.21> 
 
 
