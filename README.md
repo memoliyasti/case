@@ -4,6 +4,7 @@ Bu benim ilk açıklamalı GitHub serüvenim.
 Eksiklikler veya yanlış anlatımımdan dolayı şimdiden kusura bakmayın.
 Eklemek istediğiniz noktalar varsa ya da yanlışımı bana söylemek isterseniz seve seve dinlemek isterim;
 https://www.linkedin.com/in/mehmetyasti/
+
 Umarım faydalı olur. :)
 
 
