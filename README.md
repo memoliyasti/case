@@ -120,17 +120,29 @@ Servis dosyamız ise aşağıdaki gibidir.
 
 
 apiVersion: v1
+
 kind: Service
+
 metadata:
+
 name: frontend
+
 spec:
+
   type: NodePort
+  
   selector:
+  
     app: frontend
+    
   ports:
+  
     - protocol: TCP
+    
       port: 80
+      
       targetPort: 8080
+      
 
 type: NodePort olarak servis edilirse podlarımıza node’un dış bacağından (şimdilik cluster içinden) erişilebilmesi için port açıyor.
 
