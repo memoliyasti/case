@@ -26,21 +26,26 @@ Ben bazı işlemlerde WSL kullanıyorum (Windows için ayarlamalar bazen uzun ge
 git clone https://gitlab.com/bcfmkubilay/dummy-spring-boot.git
 
 Java dosyası build etmemiz için Java jdk'sına ihtiyacımız olacak onun için Ubuntu (WSL) komutumuz;
+
 sudo apt-get install default-jdk 
 
 Yüklenip yüklenmediğini kontrol etmek için;
+
 java -version
 
 İlgili repoyu locale çektikten sonra build işlemi için "Maven" aracına ihtiyacımız olacak.
 Windows için Maven kurulumunu aşağıdaki linkten takip edebilirsiniz;
 https://www.javatpoint.com/how-to-install-maven
 WSL için;
+
 sudo apt-get install maven 
 
 Yüklenip yüklenmediğini kontrol etmek için;
+
 mvn –version
 
 İlgili klasör içerisinde src dosyasının olduğu kökte terminalimizi açıp maven ile çalışmaya başlıyoruz.
+
 mvn clean install -DskipTests
 
 Başarılı bir şekilde çalıştıktan sonra klasör içerisinde “target” adına bir klasör ve o klasör altında
