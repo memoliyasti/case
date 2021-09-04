@@ -95,12 +95,14 @@ minikube start
 diyerek docker-driver üstünde bir tane master node üzerinde containerımız oluşuyor.
 
 (Evet, k8s de aslında bir container olarak çalışıyor 😊 )
+
 kubectl get nodes -A
 
 dersek k8s’in ayakta olup olmadığını anlarız.
 
 Uygulamamızın container halinde pod’larda çalışabilmesi için yaml dosyalarında ilgili tanımlamaları yapıp kubectl komutu ile çalıştırmamız gerekiyor.
 k8s uygulamamıza çalıştıktan sonra localimizden ulaşmak için ihtiyacımız olan servisler şunlardır;
+
 deployment ve service 
 
 minikube start dedikten sonra master node oluşur ve yaml dosyalarımızın olduğu klasör içerisinde VS Code çalıştırırız ve bu yaml dosyalarını çalıştırıp k8s’de deployment ve servislerimizin oluşmasını sağlarız.
@@ -108,6 +110,7 @@ minikube start dedikten sonra master node oluşur ve yaml dosyalarımızın oldu
 Localimizden ulaşacağımız ya da herhangi bir bulut servis sağlayıcısından erişmek istediğimizi uygulamamız için deployment dosyamız aynıdır. Ancak çalıştıracağımız servis dosyamızın servis tipi özelliğinde bazı değişiklikler olacaktır. 
 
 Önce lokalimizden ulaşacağımız senaryo için hazırlanalım.
+
 Deployment dosyamız aşağıdaki gibidir.
 
 apiVersion: apps/v1
@@ -175,19 +178,25 @@ spec:
       targetPort: 8080
 
 type: NodePort olarak servis edilirse podlarımıza node’un dış bacağından (şimdilik cluster içinden) erişilebilmesi için port açıyor.
+
 Ancak minikube buna direkt olarak izin vermediği için tünel açmak zorunda kalıyoruz.
 
 Bu tünelin açılması için gerekli olan komut;
+
 minikube service –url $oluşanservisinadı
 
 komutun output’unda  http://127.0.0.1:$yazanportnumber/blue adresine browser üzerinden giderseniz blue tagli uygulamanın çalıştığını görebilirsiniz.
+
 Aynı şekilde aynı işlemleri green tagli uygulama için yaparak aynı sonuçları alabilirsiniz.
 
 Bu şekilde localimizde oluşturduğumuz uygulamalara aynı şekilde localimizden de ulaşabildik.
 
 AWS ortamı içinde yapacağımız işlemlerin çoğu aynı sadece birkaç authentication işlemi var AWS CLI ile. Onları da sırayla yapalım.
+
 Powershell ya da Linux terminalinden oluşturmak istediğimiz AWS Cluster’ı için eksctl aracına ihtiyacımız var.
+
 Aşağıdaki linkten nasıl yüklenebileceğine ulaşabilirsiniz.
+
 https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html
 
 Yükleme ve login işlemlerini yaptıktan sonra powershell üzerinden cluster oluşturma adımına geçerlim.
