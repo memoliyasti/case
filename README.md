@@ -133,16 +133,23 @@ spec:
       targetPort: 8080
 
 type: NodePort olarak servis edilirse podlarımıza node’un dış bacağından (şimdilik cluster içinden) erişilebilmesi için port açıyor.
+
 Ancak minikube buna direkt olarak izin vermediği için tünel açmak zorunda kalıyoruz.
+
 Bu tünelin açılması için gerekli olan komut;
 minikube service –url $oluşanservisinadı
+
 komutun output’unda  http://127.0.0.1:$yazanportnumber/blue adresine browser üzerinden giderseniz blue tagli uygulamanın çalıştığını görebilirsiniz.
+
 Aynı şekilde aynı işlemleri green tagli uygulama için yaparak aynı sonuçları alabilirsiniz.
 Bu şekilde localimizde oluşturduğumuz uygulamalara aynı şekilde localimizden de ulaşabildik.
+
 AWS ortamı içinde yapacağımız işlemlerin çoğu aynı sadece birkaç authentication işlemi var AWS CLI ile. Onları da sırayla yapalım.
+
 Powershell ya da Linux terminalinden oluşturmak istediğimiz AWS Cluster’ı için eksctl aracına ihtiyacımız var.
 Aşağıdaki linkten nasıl yüklenebileceğine ulaşabilirsiniz.
 https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html
+
 Yükleme ve login işlemlerini yaptıktan sonra powershell üzerinden cluster oluşturma adımına geçerlim.
 eksctl create cluster --name <my-cluster> --version <1.21> 
 
@@ -151,13 +158,19 @@ https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html
 
 
 Bu işlem biraz zaman almaktadır. Bilginize.
+  
 AWS’deki cluster oluşunca ordaki contexti yani ortamı kontrol etmek için contex değiştirmemiz gerekiyor. Localimizde olan yaml dosyalarını o ortamda çalıştırmak için geçiş yapacağımız yerde çalışmamız gerekli.Bunun için gerekli komut;
+  
 kubectl config use-context $aws’deki context’inizin adı.
+  
 Context adınızı öğrenmek için gereken komut;
+  
 kubectl config view yazarak name: kısmının karşısında aws ile olan yeri seçip yukardaki komuta ekleyebilirsiniz.
+  
 Geçiş yaptıktan sonra tekrardan blue deployment için yaml dosyamızı çalıştırıyoruz.
 Yalnız AWS ortamındaki uygulamamızı dış dünayaya açacağımız için bu sefer service tipini LoadBalancer olarak seçiyoruz.
 Service yaml dosyasını aşağıda bulabilirsiniz.
+  
 apiVersion: v1
 kind: Service
 metadata:
@@ -175,7 +188,10 @@ Oluşturulan tüm servislerin ayakta olup olmadığını anlamak için tekrardan
 Bu LoadBalancer tipi servis bize AWS’de uygulamamızı dış dünyaya açmak için bir load balancer oluşturuyor ve bize bir external ip veriyor.
 Bunu görmek için gereken komut;
 kubectl get svc
+  
 Oradaki uzantıyı alıp browserımıza /blue prefixi ile girersek, uygulamamızın dış dünyaya açıldığını da görmüş oluruz.
+  
+  
 Benim anlatacaklarım şimdilik bu kadar.
 Hatalar ve eksiklikler için tekrardan kusura bakmayın lütfen.
 Gönül isterdi CI/CD süreci ile de bütünleşmiş bir proje gerçekleştireyim ama maalesef beceremedim.
