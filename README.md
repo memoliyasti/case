@@ -35,7 +35,9 @@ java -version
 
 İlgili repoyu locale çektikten sonra build işlemi için "Maven" aracına ihtiyacımız olacak.
 Windows için Maven kurulumunu aşağıdaki linkten takip edebilirsiniz;
+
 https://www.javatpoint.com/how-to-install-maven
+
 WSL için;
 
 sudo apt-get install maven 
@@ -51,7 +53,10 @@ mvn clean install -DskipTests
 Başarılı bir şekilde çalıştıktan sonra klasör içerisinde “target” adına bir klasör ve o klasör altında
 “jar” dosyası oluşacaktır. Oluşan klasör ve ilgili dosya oluşması mvn ‘ ı başarılı bir şekilde gerçekleştirdiğimizi gösteriyor. (Bu işlemi WSL’de başarılı şekilde çalıştığını görünce WSL’den devam ettim 😊)
 
-Build işleminden önce aynı source kodu indirip tag:blue ve tag:green olarak code içerisinde mapping kısmını ayarlarsanız ilerde yapacağımız tag bazlı deployment için faydalı olur.(Tabi benim gibi Java bilmiyorsanız 😊) Eğer koda içerisinde dinamik bir şekilde prefixi alıp mapping string kısmına ekleyebilirseniz buna hiç gerek kalmaz.
+Build işleminden önce aynı source kodu indirip tag:blue ve tag:green olarak code içerisinde mapping kısmını ayarlarsanız ilerde yapacağımız tag bazlı deployment için faydalı olur.
+
+(Tabi benim gibi Java bilmiyorsanız 😊) Eğer koda içerisinde dinamik bir şekilde prefixi alıp mapping string kısmına ekleyebilirseniz buna hiç gerek kalmaz.
+
 VS Code’ta projenin root directory’sinde bir Dockerfile oluşturup, onun içerisinde uygulamamızı containerize edeceğiz.
 
 Build için ilgili Dockerfile komutları aşağıda belirtilmiştir.
@@ -70,7 +75,7 @@ ENTRYPOINT ["java","-jar","helloworld-0.0.1-SNAPSHOT.jar"]
 
 
 Dockerfile dosyasını oluşturduktan sonra tekrardan dosyanın olduğu klasörde terminale geçip
-Uygulamamız docker imajı haline getirmemiz gerekir ve imaj oluşturma komutumuz;
+Uygulamamızı docker imajı haline getirmemiz gerekir ve imaj oluşturma komutumuz;
 
 docker build -t istediginizismiverebilirsiniz .
 
@@ -82,6 +87,7 @@ Oluşan imajın container olarak çalışıp çalışmadığını anlamak için 
 Şimdi bu imajı dockerhub hesabımıza gönderelim.
 
 Local repomuzda bulunan imagı dockerhub hesabımıza göndermek için aşağıdaki linkten detaylı bilgi alabilirsiniz.
+
 https://www.section.io/engineering-education/docker-push-for-publishing-images-to-docker-hub/
 
 ***shell’den docker’a login olmayı unutmayınız.
@@ -101,6 +107,7 @@ kubectl get nodes -A
 dersek k8s’in ayakta olup olmadığını anlarız.
 
 Uygulamamızın container halinde pod’larda çalışabilmesi için yaml dosyalarında ilgili tanımlamaları yapıp kubectl komutu ile çalıştırmamız gerekiyor.
+
 k8s uygulamamıza çalıştıktan sonra localimizden ulaşmak için ihtiyacımız olan servisler şunlardır;
 
 deployment ve service 
@@ -215,9 +222,11 @@ kubectl config use-context $aws’deki context’inizin adı.
     
 Context adınızı öğrenmek için gereken komut;
 kubectl config view yazarak name: kısmının karşısında aws ile olan yeri seçip yukardaki komuta ekleyebilirsiniz.
+  
 Geçiş yaptıktan sonra tekrardan blue deployment için yaml dosyamızı çalıştırıyoruz.
     
 Yalnız AWS ortamındaki uygulamamızı dış dünayaya açacağımız için bu sefer service tipini LoadBalancer olarak seçiyoruz.
+  
 Service yaml dosyasını aşağıda bulabilirsiniz.
     
 apiVersion: v1
@@ -244,18 +253,25 @@ spec:
       targetPort: 8080
 
 Oluşturulan tüm servislerin ayakta olup olmadığını anlamak için tekrardan kubectl get all diyoruz istenilen servislerin oluşup oluşmadığını kontrol ediyoruz.
+  
 Bu LoadBalancer tipi servis bize AWS’de uygulamamızı dış dünyaya açmak için bir load balancer oluşturuyor ve bize bir external ip veriyor.
 Bunu görmek için gereken komut;
+  
 kubectl get svc
     
 Oradaki uzantıyı alıp browserımıza /blue prefixi ile girersek, uygulamamızın dış dünyaya açıldığını da görmüş oluruz.
     
     
 Benim anlatacaklarım şimdilik bu kadar.    
+  
 Hatalar ve eksiklikler için tekrardan kusura bakmayın lütfen.
+  
 Gönül isterdi CI/CD süreci ile de bütünleşmiş bir proje gerçekleştireyim ama maalesef beceremedim.
+  
 İlerleyen zamanlarda Jenkins ile daha çok çalışıp onu da yapacağım.
+  
 Buraya kadar okuduysanız teşekkür ederim.
+  
 Herkese sağlıklı günler dilerim. 😊
 
 
