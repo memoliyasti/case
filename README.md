@@ -10,13 +10,14 @@ Umarım faydalı olur. :)
 
 Bugün sizlere Spring Boot ile yazılan bir HelloWorld web uygulamasının DockerFile ile nasıl build edilip dockerize edildikten sonra k8s ortamına nasıl deploy edileceğini anlatmaya çalışacağım.
 
-Required Tools;
+```Required Tools;
 -VS Code
 -Java jdk
 -Docker Desktop
 -k8s (minikube)
 -mvn
 -DockerHub account
+```
 
 Öncelikle ilgili repoyu localimize çekelim.
 
@@ -27,11 +28,11 @@ git clone https://gitlab.com/bcfmkubilay/dummy-spring-boot.git
 
 Java dosyası build etmemiz için Java jdk'sına ihtiyacımız olacak onun için Ubuntu (WSL) komutumuz;
 
-sudo apt-get install default-jdk 
+```sudo apt-get install default-jdk``` 
 
 Yüklenip yüklenmediğini kontrol etmek için;
 
-java -version
+```java -version```
 
 İlgili repoyu locale çektikten sonra build işlemi için "Maven" aracına ihtiyacımız olacak.
 Windows için Maven kurulumunu aşağıdaki linkten takip edebilirsiniz;
@@ -40,15 +41,15 @@ https://www.javatpoint.com/how-to-install-maven
 
 WSL için;
 
-sudo apt-get install maven 
+```sudo apt-get install maven``` 
 
 Yüklenip yüklenmediğini kontrol etmek için;
 
-mvn –version
+```mvn –version```
 
 İlgili klasör içerisinde src dosyasının olduğu kökte terminalimizi açıp maven ile çalışmaya başlıyoruz.
 
-mvn clean install -DskipTests
+```mvn clean install -DskipTests```
 
 Başarılı bir şekilde çalıştıktan sonra klasör içerisinde “target” adına bir klasör ve o klasör altında
 “jar” dosyası oluşacaktır. Oluşan klasör ve ilgili dosya oluşması mvn ‘ ı başarılı bir şekilde gerçekleştirdiğimizi gösteriyor. (Bu işlemi WSL’de başarılı şekilde çalıştığını görünce WSL’den devam ettim 😊)
@@ -61,23 +62,19 @@ VS Code’ta projenin root directory’sinde bir Dockerfile oluşturup, onun iç
 
 Build için ilgili Dockerfile komutları aşağıda belirtilmiştir.
 
+```
 FROM java:8-jdk-alpine
-
 COPY ./target/helloworld-0.0.1-SNAPSHOT.jar /usr/app/
-
 WORKDIR /usr/app
-
 RUN sh -c 'touch helloworld-0.0.1-SNAPSHOT.jar.jar'
-
 ARG JAR_FILE=target/helloworld-0.0.1-SNAPSHOT.jar
-
 ENTRYPOINT ["java","-jar","helloworld-0.0.1-SNAPSHOT.jar"]
-
+```
 
 Dockerfile dosyasını oluşturduktan sonra tekrardan dosyanın olduğu klasörde terminale geçip
 Uygulamamızı docker imajı haline getirmemiz gerekir ve imaj oluşturma komutumuz;
 
-docker build -t istediginizismiverebilirsiniz .
+``` docker build -t istediginizismiverebilirsiniz . ```
 
 (sondaki noktayı unutmamalısınız 😊 )
 
@@ -92,19 +89,17 @@ https://www.section.io/engineering-education/docker-push-for-publishing-images-t
 
 ***shell’den docker’a login olmayı unutmayınız.
 
-docker login
+``` docker login ```
 
 Hub’a imajı attıktan sonra yapacağımız işlem, k8s ortamında deployment’lar oluşturarak uygulamamıza içerden ve daha sonrasında dışardan ulaşmak.
 K8s ortamında node oluşturmak için minikube kullanıyorum.
 
-minikube start
+```minikube start```
 diyerek docker-driver üstünde bir tane master node üzerinde containerımız oluşuyor.
 
 (Evet, k8s de aslında bir container olarak çalışıyor 😊 )
 
-kubectl get nodes -A
-
-dersek k8s’in ayakta olup olmadığını anlarız.
+```kubectl get nodes -A``` dersek k8s’in ayakta olup olmadığını anlarız.
 
 Uygulamamızın container halinde pod’larda çalışabilmesi için yaml dosyalarında ilgili tanımlamaları yapıp kubectl komutu ile çalıştırmamız gerekiyor.
 
@@ -120,69 +115,43 @@ Localimizden ulaşacağımız ya da herhangi bir bulut servis sağlayıcısında
 
 Deployment dosyamız aşağıdaki gibidir.
 
+```
 apiVersion: apps/v1
-
 kind: Deployment
-
 metadata:
-
   name: frontend
-  
 spec:
-
   replicas: 1
-  
   selector:
-  
     matchLabels:
-    
       app: frontend
-      
   template:
-  
     metadata:
-    
       labels:
-      
         app: frontend
-        
     spec:
-    
       containers:
-      
       - name: frontend
-      
         image: memoliyasti/dummy-spring-boot:blue
-        
         ports:
-        
         - containerPort: 80
-        
+```
 Servis dosyamız ise aşağıdaki gibidir.
 
+```
 apiVersion: v1
-
 kind: Service
-
 metadata:
-
   name: frontend
-  
 spec:
-
   type: NodePort
-  
   selector:
-  
     app: frontend
-    
   ports:
-  
     - protocol: TCP
-    
       port: 80
-      
       targetPort: 8080
+```
 
 type: NodePort olarak servis edilirse podlarımıza node’un dış bacağından (şimdilik cluster içinden) erişilebilmesi için port açıyor.
 
@@ -208,7 +177,7 @@ https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html
 
 Yükleme ve login işlemlerini yaptıktan sonra powershell üzerinden cluster oluşturma adımına geçerlim.
 
-eksctl create cluster --name <my-cluster> --version <1.21> 
+```eksctl create cluster --name <my-cluster> --version <1.21> ```
 
 
 https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html
@@ -228,36 +197,28 @@ Geçiş yaptıktan sonra tekrardan blue deployment için yaml dosyamızı çalı
 Yalnız AWS ortamındaki uygulamamızı dış dünayaya açacağımız için bu sefer service tipini LoadBalancer olarak seçiyoruz.
   
 Service yaml dosyasını aşağıda bulabilirsiniz.
-    
+
+```
 apiVersion: v1
-    
-kind: Service
-    
+kind: Service    
 metadata:
-    
   name: frontendlb
-    
 spec:
-    
   type: LoadBalancer
-    
   selector:
-    
     app: frontend
-    
   ports:
     - protocol: TCP
-    
       port: 80
-    
       targetPort: 8080
+```
 
 Oluşturulan tüm servislerin ayakta olup olmadığını anlamak için tekrardan kubectl get all diyoruz istenilen servislerin oluşup oluşmadığını kontrol ediyoruz.
   
 Bu LoadBalancer tipi servis bize AWS’de uygulamamızı dış dünyaya açmak için bir load balancer oluşturuyor ve bize bir external ip veriyor.
 Bunu görmek için gereken komut;
   
-kubectl get svc
+```kubectl get svc```
     
 Oradaki uzantıyı alıp browserımıza /blue prefixi ile girersek, uygulamamızın dış dünyaya açıldığını da görmüş oluruz.
     
